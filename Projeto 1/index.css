@@ -1,0 +1,161 @@
+*{
+    box-shadow: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    width: 100%;
+    height: auto;
+
+    background-color: #efefef;
+}
+
+/*Cabeçalho página*/
+#campo-cabecalho{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    width: 100%;
+    height: 90px;
+
+    background-color: #00629b;
+}
+
+#campo-botao-cabecalho{
+    margin-right: 12%;
+}
+
+.botao-cabecalho{
+    padding: 10px 20px;
+    margin: 10px;
+
+    border-radius: 10px;
+    background-color: #00629b;
+    border: 1px solid #fff;
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.botao-cabecalho:hover{
+    background-color: #fff;
+    border: 1px solid #00629b;
+    color: #00629b;
+}
+
+/*Conteúdo página*/
+#campo-corpo{
+    display: block;
+
+    width: 75%;
+    height: auto;
+
+    margin: auto;
+}
+
+#elemento-pesquisa{
+    display: flex;
+    justify-content: flex-start;
+
+    width: 350px;
+    height: 30px;
+
+    padding: 10px;
+    margin: 28px 0;
+
+    border-radius: 10px;
+    background-color: #fff;
+    
+    box-shadow: 10px 10px 50px #ddd;
+}
+
+#input-pesquisa{
+    width: 400px;
+
+    margin: 0 5px;
+
+    border: none;
+    
+    font-size: 15px;
+}
+
+#input-pesquisa::placeholder{
+    color: #d3d3d3;
+}
+
+#input-pesquisa:focus{
+    outline: none;
+}
+
+
+#sessao-consulta{
+    width: 100%;
+    height: auto;
+}
+
+#tabela-consulta{
+    width: 100%;
+
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden; 
+
+    box-shadow: 5px 5px 30px #ccc;
+}
+
+.linha-tabela-cabecalho{
+    background-color: #00629b;
+}
+
+.coluna-cabecalho-tabela{
+    width: 25%;
+
+    padding: 15px;
+
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+}
+
+.linha-tabela-conteudo:nth-child(even){
+    background-color: #fafafa;
+}
+
+.linha-tabela-conteudo:nth-child(odd){
+    background-color: #e7f4f9;
+}
+
+.coluna-conteudo-tabela{
+    width: 25%;
+
+    padding: 15px;
+
+    font-size: 15px;
+    color: #000;
+    text-align: center;
+}
+
+.coluna-conteudo-tabela-botao{
+    width: 25%;
+
+    font-size: 15px;
+    color: #000;
+    text-align: center;
+}
+
+.botao-prosseguir-tabela{
+    padding: 10px 12px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: #ff8200;
+    font-weight: bold;
+    color: #fff;
+}
