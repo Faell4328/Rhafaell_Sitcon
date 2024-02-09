@@ -158,4 +158,90 @@ body{
     background-color: #ff8200;
     font-weight: bold;
     color: #fff;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.botao-prosseguir-tabela:hover{
+    outline: 1px solid #ff8200;
+    background-color: #fff;
+    color: #ff8200;
+}
+
+#sessao-paginador{
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+    height: auto;
+}
+
+#campo-paginador{
+    display: flex;
+    justify-content: center;
+
+    width: auto;
+    height: 50px;
+    
+    margin: 30px;
+
+    border-radius: 10px;
+    background-color: #fafafa;
+    
+    box-shadow: 10px 10px 50px #ddd;
+}
+
+#elementos-paginador{
+    display: flex;
+    align-items: center;
+
+    list-style-type: none;
+}
+
+.elemento-pagina{
+    padding: 5px 8px;
+    margin: 3px;
+
+    border-radius: 5px;
+    color: #d3d3d3;
+    font-weight: bold;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+#elemento-pagina-atual{
+    padding: 5px 8px;
+    margin: 3px;
+
+    border-radius: 5px;
+    background-color: #00629b;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+#seta-anterior-pagina{
+    width: auto;
+    height: 14px;
+
+    padding: 10px;
+    margin: 0 19px 0 14px;
+
+    cursor: pointer;
+}
+
+#seta-proxima-pagina{
+    width: auto;
+    height: 14px;
+
+    padding: 10px;
+    margin: 0 14px 0 19px;
+
+    transform: rotate(180deg);
+
+    cursor: pointer;
 }
