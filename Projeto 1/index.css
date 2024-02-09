@@ -16,11 +16,15 @@ body{
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    position: fixed;
+    top: 0px;
 
     width: 100%;
     height: 90px;
 
     background-color: #00629b;
+
+    z-index: 1
 }
 
 #campo-botao-cabecalho{
@@ -52,6 +56,8 @@ body{
 /*Conteúdo página*/
 #campo-corpo{
     display: block;
+    position: relative;
+    top: 90px;
 
     width: 75%;
     height: auto;
@@ -182,7 +188,7 @@ body{
     justify-content: center;
 
     width: auto;
-    height: 50px;
+    height: 45px;
     
     margin: 30px;
 
@@ -244,4 +250,22 @@ body{
     transform: rotate(180deg);
 
     cursor: pointer;
+}
+
+/*Rodape página*/
+#campo-rodape{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 90px;
+
+    width: 100%;
+    height: 150px;
+
+    background-color: #edf8fc;
+}
+
+#texto-rodape{
+    color: #7eb1ce;
 }
