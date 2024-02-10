@@ -201,8 +201,6 @@ body{
 #elementos-paginador{
     display: flex;
     align-items: center;
-
-    list-style-type: none;
 }
 
 .elemento-pagina{
@@ -213,6 +211,7 @@ body{
     color: #d3d3d3;
     font-weight: bold;
     font-size: 14px;
+    text-decoration: none;
 
     cursor: pointer;
 }

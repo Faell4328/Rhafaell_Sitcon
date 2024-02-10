@@ -64,64 +64,82 @@ echo'
         </section>
         <section id="sessao-paginador">
             <div id="campo-paginador">
-                <ul id="elementos-paginador">
-                    <img id="seta-anterior-pagina" src="icones/seta.png">';
+                <div id="elementos-paginador">';
 
 $quantidadePagina=$retornoConsultaDB["quantidadePaginasPacientes"];
 settype($quantidadePagina, "integer");
 $paginaAtual=$retornoConsultaDB["paginaAtual"];
 
+if($paginaAtual==1){
+    echo'
+                        <img id="seta-anterior-pagina" style="opacity: 0.3" src="icones/seta.png">';
+}
+else{
+    echo'               <a href="./?p='.($paginaAtual-1).'">
+                            <img id="seta-anterior-pagina" src="icones/seta.png">
+                        </a>';
+}
+
 if($quantidadePagina>5){
     if($paginaAtual==1){
         for($contadorPagina=0; $contadorPagina<3; $contadorPagina++){
             if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
-                echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+                echo '<a id="elemento-pagina-atual">'.($contadorPagina+1).'</a>';
             }
             else{
-                echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+                echo '<a class="elemento-pagina" href="./?p='.($contadorPagina+1).'">'.($contadorPagina+1).'</a>';
             }
         }
-        echo '<li class="elemento-pagina">...</li>';
-        echo '<li class="elemento-pagina">'.$quantidadePagina.'</li>';
+        echo '<a class="elemento-pagina">...</a>';
+        echo '<a class="elemento-pagina"  href="./?p='.($quantidadePagina).'">'.($quantidadePagina).'</a>';
     }
-    else if(($paginaAtual+4)<$quantidadePagina){
+    else if(($paginaAtual+3)<$quantidadePagina){
         for($contadorPagina=$paginaAtual-2; $contadorPagina<($paginaAtual+1); $contadorPagina++){
             if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
-                echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+                echo '<a id="elemento-pagina-atual">'.($contadorPagina+1).'</a>';
             }
             else{
-                echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+                echo '<a class="elemento-pagina" href="./?p='.($contadorPagina+1).'">'.($contadorPagina+1).'</a>';
             }
         }
-        echo '<li class="elemento-pagina">...</li>';
-        echo '<li class="elemento-pagina">'.$quantidadePagina.'</li>';
+        echo '<a class="elemento-pagina">...</a>';
+        echo '<a class="elemento-pagina"  href="./?p='.($quantidadePagina).'">'.($quantidadePagina).'</a>';
     }
     else{
         for($contadorPagina=($quantidadePagina-4); $contadorPagina<$quantidadePagina+1; $contadorPagina++){
             if(($contadorPagina)==$retornoConsultaDB["paginaAtual"]){
-                echo '<li id="elemento-pagina-atual">'.($contadorPagina).'</li>';
+                echo '<a id="elemento-pagina-atual">'.($contadorPagina).'</a>';
             }
             else{
-                echo '<li class="elemento-pagina">'.($contadorPagina).'</li>';
+                echo '<a class="elemento-pagina" href="./?p='.($contadorPagina).'">'.($contadorPagina).'</a>';
             }
         }
     }
 }
 
 else{
-    for($contadorPagina=0; $contadorPagina<5; $contadorPagina++){
+    for($contadorPagina=0; $contadorPagina<$quantidadePagina; $contadorPagina++){
         if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
-            echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+            echo '<a id="elemento-pagina-atual">'.($contadorPagina+1).'</a>';
         }
         else{
-            echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+            echo '<a class="elemento-pagina" href="./?p='.($contadorPagina+1).'">'.($contadorPagina+1).'</a>';
         }
     }
 }
 
+if($paginaAtual==$quantidadePagina){
+    echo'
+                        <img id="seta-proxima-pagina" style="opacity: 0.3" src="icones/seta.png">';
+}
+else{
+    echo'               <a href="./?p='.($paginaAtual+1).'">
+                            <img id="seta-proxima-pagina" src="icones/seta.png">
+                        </a>';
+}
+
 echo'
-                    <img id="seta-proxima-pagina" src="icones/seta.png">
-                </ul>
+                </div>
             </div>
         </section>
     </article>
