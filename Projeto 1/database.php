@@ -31,11 +31,9 @@ function consultarPacientes(){
         die("Um erro inesperado aconteceu");
     }
 
-    if(isset($_GET["p"])){
-        $paginaAtual=preg_replace("/[^0-9]/", "", $_GET["p"]);
-        settype($paginaAtual, "integer");
-    }
-    else{
+    $paginaAtual=preg_replace("/[^0-9]/", "", $_GET["p"]);
+    settype($paginaAtual, "integer");
+    if($paginaAtual<=0){
         header("Location:?p=1");
     }
 
@@ -48,6 +46,10 @@ function consultarPacientes(){
         $quantidadePaginasPacientes=($quantidadeTotalLinhas/10);
         settype($quantidadePaginasPacientes, "int");
         $quantidadePaginasPacientes++;
+    }
+
+    if($paginaAtual>$quantidadePaginasPacientes){
+        die("Essa página não existe");
     }
     
     $ponteiroPaginaAtual=($paginaAtual-1)*10;

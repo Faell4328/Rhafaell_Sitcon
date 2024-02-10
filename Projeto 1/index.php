@@ -1,5 +1,13 @@
 <?php
 
+if(!isset($_GET["p"])){
+    header("Location:?p=1");
+}
+
+$autorizacao_execucao_script_database=true;
+require_once("database.php");
+$retornoConsultaDB=consultarPacientes();
+
 echo '
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,11 +44,6 @@ echo '
 
 // Adicionando pacientes da tabela
 
-$autorizacao_execucao_script_database=true;
-require_once("database.php");
-
-$retornoConsultaDB=consultarPacientes();
-
 $quantidadePacientes=count($retornoConsultaDB["pacientes"]);
 for($contadorPacientes=0; $contadorPacientes<$quantidadePacientes; $contadorPacientes++){
     $nomePacienteAtual=$retornoConsultaDB["pacientes"][$contadorPacientes]["nome"];
@@ -64,9 +67,57 @@ echo'
                 <ul id="elementos-paginador">
                     <img id="seta-anterior-pagina" src="icones/seta.png">';
 
-echo'
-                    <li id="elemento-pagina-atual">1</li>
-                    <li class="elemento-pagina">2</li>';
+$quantidadePagina=$retornoConsultaDB["quantidadePaginasPacientes"];
+settype($quantidadePagina, "integer");
+$paginaAtual=$retornoConsultaDB["paginaAtual"];
+
+if($quantidadePagina>5){
+    if($paginaAtual==1){
+        for($contadorPagina=0; $contadorPagina<3; $contadorPagina++){
+            if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
+                echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+            }
+            else{
+                echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+            }
+        }
+        echo '<li class="elemento-pagina">...</li>';
+        echo '<li class="elemento-pagina">'.$quantidadePagina.'</li>';
+    }
+    else if(($paginaAtual+4)<$quantidadePagina){
+        for($contadorPagina=$paginaAtual-2; $contadorPagina<($paginaAtual+1); $contadorPagina++){
+            if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
+                echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+            }
+            else{
+                echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+            }
+        }
+        echo '<li class="elemento-pagina">...</li>';
+        echo '<li class="elemento-pagina">'.$quantidadePagina.'</li>';
+    }
+    else{
+        for($contadorPagina=($quantidadePagina-4); $contadorPagina<$quantidadePagina+1; $contadorPagina++){
+            if(($contadorPagina)==$retornoConsultaDB["paginaAtual"]){
+                echo '<li id="elemento-pagina-atual">'.($contadorPagina).'</li>';
+            }
+            else{
+                echo '<li class="elemento-pagina">'.($contadorPagina).'</li>';
+            }
+        }
+    }
+}
+
+else{
+    for($contadorPagina=0; $contadorPagina<5; $contadorPagina++){
+        if(($contadorPagina+1)==$retornoConsultaDB["paginaAtual"]){
+            echo '<li id="elemento-pagina-atual">'.($contadorPagina+1).'</li>';
+        }
+        else{
+            echo '<li class="elemento-pagina">'.($contadorPagina+1).'</li>';
+        }
+    }
+}
 
 echo'
                     <img id="seta-proxima-pagina" src="icones/seta.png">
