@@ -14,7 +14,7 @@ function consultarQuantidadeTotalLinhas(){
         die("Um erro inesperado aconteceu");
     }
     
-    $sql="SELECT COUNT(*) AS id FROM pacientes";
+    $sql="SELECT COUNT(*) AS id FROM pacientes WHERE status='ativo'";
     $resultadoConsulta=$conexao->query($sql);
     if(!$resultadoConsulta){
         die("Nada foi retornado");
@@ -53,7 +53,7 @@ function consultarPacientes(){
     }
     
     $ponteiroPaginaAtual=($paginaAtual-1)*10;
-    $conexaoTratada=$conexao->prepare("SELECT nome, DATE_FORMAT(dataNasc, '%d/%m/%Y') AS dataFormatada, CPF FROM pacientes LIMIT 10 OFFSET ?");
+    $conexaoTratada=$conexao->prepare("SELECT nome, DATE_FORMAT(dataNasc, '%d/%m/%Y') AS dataFormatada, CPF FROM pacientes WHERE status='ativo' LIMIT 10 OFFSET ?");
     $conexaoTratada->bind_param("i", $ponteiroPaginaAtual);
     $conexaoTratada->execute();
     $conexaoTratada->store_result();
@@ -81,5 +81,92 @@ function consultarPacientes(){
     return $retornoFuncao;
 }
 
+function consultarDBProfissionais(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $conexaoTratada=$conexao->prepare("SELECT nome FROM profissional WHERE status='ativo'");
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($nome);
+
+    $profissionais=[];
+    $contadorProfissionais=0;
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+            $profissionais[$contadorProfissionais]=$nome;
+            $contadorProfissionais++;
+        }
+    }
+
+    return $profissionais;
+}
+
+function consultarDBTipoSolicitacao(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $conexaoTratada=$conexao->prepare("SELECT descricao FROM tipoSolicitacao WHERE status='ativo'");
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($descricao);
+
+    $tipoConsulta=[];
+    $contadorTipoConsulta=0;
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+            $tipoConsulta[$contadorTipoConsulta]=$descricao;
+            $contadorTipoConsulta++;
+        }
+    }
+
+    return $tipoConsulta;
+}
+
+function consultarDBProcedimentos(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $conexaoTratada=$conexao->prepare("SELECT descricao, tipo_id FROM procedimentos WHERE status='ativo'");
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($descricao, $tipo_id);
+
+    $procedimentos=[];
+    $procedimentosConsulta=[];
+    $procedimentosExame=[];
+
+    $contadorProcedimentosConsulta=0;
+    $contadorProcedimentosExame=0;
+
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+        
+            // Verficia se é uma consulta
+            if($tipo_id==1){
+                $procedimentosConsulta[$contadorProcedimentosConsulta]=$descricao;
+                $contadorProcedimentosConsulta++;
+            }
+            else{
+                $procedimentosExame[$contadorProcedimentosExame]=$descricao;
+                $contadorProcedimentosExame++;
+            }
+        }
+    }
+
+    $procedimentos["consulta"]=$procedimentosConsulta;
+    $procedimentos["exame"]=$procedimentosExame;
+
+    return $procedimentos;
+}
 
 ?>

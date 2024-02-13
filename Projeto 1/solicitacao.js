@@ -4,6 +4,7 @@ var controleDisplayTipoSolicitacao=false;
 var controleDisplayProcedimentos=false;
 var controleAnimacao=false;
 
+// Fecha os campos abertos
 function verificarElementosAberto(){
     if(controleDisplayProfissional==true){
         document.getElementById("campo-informacao-profissional").click();
@@ -16,12 +17,14 @@ function verificarElementosAberto(){
     }
 }
 
+// Adicionando eventos nos elementos para fechar os campos abertos
 document.getElementsByClassName("elemento-informacao-paciente")[0].addEventListener("click", verificarElementosAberto);
 document.getElementsByClassName("elemento-informacao-paciente")[1].addEventListener("click", verificarElementosAberto);
 document.getElementsByClassName("elemento-informacao-paciente")[2].addEventListener("click", verificarElementosAberto);
 document.getElementsByClassName("campo-solicitacao-dados")[3].addEventListener("click", verificarElementosAberto);
 document.getElementsByClassName("campo-solicitacao-dados")[4].addEventListener("click", verificarElementosAberto);
 
+// Formatando a Data de Nascimento
 var numeroAnteriorData=0;
 document.getElementsByClassName("elemento-informacao-paciente")[1].addEventListener("input", function(){
     var conteudoTratado=this.value;
@@ -38,6 +41,7 @@ document.getElementsByClassName("elemento-informacao-paciente")[1].addEventListe
     }
 });
 
+// Formatando o CPF
 var numeroAnteriorCpf=0;
 document.getElementsByClassName("elemento-informacao-paciente")[2].addEventListener("input", function(){
     var conteudoTratado=this.value;
@@ -62,6 +66,7 @@ document.getElementsByClassName("elemento-informacao-paciente")[2].addEventListe
     numeroAnteriorCpf=conteudoTratado.length
 });
 
+// Adicionando evento para marcar o input checkbox/radio com check ao clicar no campo (Não sendo necessário clicar diretamente) - PROFISSIONAL
 var elementosOpcoesProfissional=document.getElementsByClassName("campo-grupo-opcoes-informacao-profissional");
 for(var contadorFor=0; contadorFor<elementosOpcoesProfissional.length; contadorFor++){
     (function (contador){
@@ -71,6 +76,7 @@ for(var contadorFor=0; contadorFor<elementosOpcoesProfissional.length; contadorF
     })(contadorFor);
 }
 
+// Adicionando evento para marcar o input checkbox/radio com check ao clicar no campo (Não sendo necessário clicar diretamente) - TIPO SOLICITAÇÃO
 var elementosOpcoesTipoSolicitacao=document.getElementsByClassName("campo-grupo-opcoes-informacao-tipo-solicitacao");
 for(var contadorFor=0; contadorFor<elementosOpcoesTipoSolicitacao.length; contadorFor++){
     (function (contador){
@@ -80,6 +86,22 @@ for(var contadorFor=0; contadorFor<elementosOpcoesTipoSolicitacao.length; contad
     })(contadorFor);
 }
 
+// Adicionando evento para marcar o input checkbox/radio com check ao clicar no campo (Não sendo necessário clicar diretamente) - PROCEDIMENTOS
+var elementosOpcoesTipoSolicitacao=document.getElementsByClassName("campo-opcoes-informacao-procedimentos");
+for(var contadorFor1=0; contadorFor1<elementosOpcoesTipoSolicitacao.length; contadorFor1++){
+    for(var contadorFor2=1; contadorFor2<elementosOpcoesTipoSolicitacao[contadorFor1].childNodes.length; contadorFor2+=2){
+
+    (function (contador1, contador2){
+        elementosOpcoesTipoSolicitacao[contador1].childNodes[contador2].addEventListener("click", ()=>{
+            elementosOpcoesTipoSolicitacao[contador1].childNodes[contador2].childNodes[1].click();  
+        });
+    })(contadorFor1, contadorFor2);
+
+    }
+}
+
+// Adicionando evento ao elemento profissional para Abrindo/Fechando (atualizando também ao fechar)
+// Vai fechar todos os outros campos abertos
 document.getElementById("campo-informacao-profissional").addEventListener("click", ()=>{
     if(controleDisplayTipoSolicitacao==true){
         document.getElementById("campo-informacao-tipo-solicitacao").click();
@@ -104,7 +126,9 @@ document.getElementById("campo-informacao-profissional").addEventListener("click
     }
 });
 
-var TipoSolicitacaoSelecionado="";
+// Adicionando evento ao elemento solicitacao para Abrindo/Fechando (atualizando também ao fechar)
+// Vai fechar todos os outros campos abertos
+var tipoSolicitacaoSelecionado="";
 document.getElementById("campo-informacao-tipo-solicitacao").addEventListener("click", ()=>{
 
     if(controleDisplayProfissional==true){
@@ -122,51 +146,65 @@ document.getElementById("campo-informacao-tipo-solicitacao").addEventListener("c
         controleDisplayTipoSolicitacao=false;
         document.getElementById("campo-opcoes-informacao-tipo-solicitacao").style="display: none";
 
-        TipoSolicitacaoSelecionado=document.querySelector(".elementos-opcoes-tipo-solicitacao:checked");
-        if(TipoSolicitacaoSelecionado!=null){
-            TipoSolicitacaoSelecionado=TipoSolicitacaoSelecionado.parentElement.childNodes[3].innerHTML;
-            document.getElementById("texto-informacao-tipo-solicitacao").innerHTML=TipoSolicitacaoSelecionado;
+        tipoSolicitacaoSelecionado=document.querySelector(".elementos-opcoes-tipo-solicitacao:checked");
+        if(tipoSolicitacaoSelecionado!=null){
+            tipoSolicitacaoSelecionado=tipoSolicitacaoSelecionado.parentElement.childNodes[3].innerHTML;
+            document.getElementById("texto-informacao-tipo-solicitacao").innerHTML=tipoSolicitacaoSelecionado;
 
             carregarProcedimentos();
         }
     }
 });
 
-var escolhaAntigaTipoSolicitacaoSelecionado="";
+// Vai verificar se ocorreu uma alteração na seleção da solicitação (se ocorrer, ele desmarca os inputs do anterior e limpa o texto)
+var elementoSolicitacaoSelecionado="";
+var tipoSolicitacaoSelecionadoAnterior="";
 function carregarProcedimentos(){
-    if(TipoSolicitacaoSelecionado==escolhaAntigaTipoSolicitacaoSelecionado){
+    if(tipoSolicitacaoSelecionado==tipoSolicitacaoSelecionadoAnterior){
         return;
     }
-    else if(TipoSolicitacaoSelecionado=="Exames Laboratório"){
-        document.getElementById("campo-opcoes-informacao-procedimentos").innerHTML='\n                        <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 1">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 1</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 2">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 2</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 3">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 3</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 4">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 4</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 5">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 5</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" procname="nomeProcedimentos"edimentos value="Exemplo de Exame Laboratorio 6">\n                            <label class="texto-informacao-opcoes">Exemplo de Exame Laboratorio 6</label>\n                        </div>\n                    ';
-        document.getElementById("texto-informacao-procedimentos").innerHTML="Selecione";
-        escolhaAntigaTipoSolicitacaoSelecionado=TipoSolicitacaoSelecionado;
 
-        var elementosOpcoesProcedimentos=document.getElementsByClassName("campo-grupo-opcoes-informacao-procedimentos");
-        for(var contadorFor=0; contadorFor<elementosOpcoesProcedimentos.length; contadorFor++){
-            (function (contador){
-                elementosOpcoesProcedimentos[contador].addEventListener("click", ()=>{
-                    document.getElementsByClassName("elementos-opcoes-informacao-procedimentos")[contador].click();
-                });
-            })(contadorFor);
+    if(tipoSolicitacaoSelecionado=="Exames Laboratoriais"){
+        elementoSolicitacaoSelecionado=document.getElementsByClassName("campo-opcoes-informacao-procedimentos")[1];
+        tipoSolicitacaoSelecionadoAnterior=tipoSolicitacaoSelecionado;
+        document.getElementById("texto-informacao-procedimentos").innerHTML="Selecione";
+
+        // Removendo dos inputs do procedimentos marcados como checked
+        procedimentosSelecionado=document.querySelectorAll(".elementos-opcoes-informacao-procedimentos:checked");
+        if(procedimentosSelecionado.length>0){
+            for(contadorFor=0; contadorFor<procedimentosSelecionado.length; contadorFor++){
+                if(procedimentosSelecionado[contadorFor].checked==true){
+                    procedimentosSelecionado[contadorFor].checked=false;
+                }
+            }
         }
+
+        procedimentosSelecionado="";
+        copiaProcedimentosSelecionado="";
     }
     else{
-        document.getElementById("campo-opcoes-informacao-procedimentos").innerHTML='\n                        <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 1">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 1</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 2">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 2</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 3">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 3</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 4">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 4</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 5">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 5</label>\n                        </div>\n                       <div class="campo-grupo-opcoes-informacao-procedimentos">\n                            <input class="elementos-opcoes-informacao-procedimentos" type="radio" procname="nomeProcedimentos"edimentos value="Exemplo de Consulta 6">\n                            <label class="texto-informacao-opcoes">Exemplo de Consulta 6</label>\n                        </div>\n                    ';
+        elementoSolicitacaoSelecionado=document.getElementsByClassName("campo-opcoes-informacao-procedimentos")[0];
+        tipoSolicitacaoSelecionadoAnterior=tipoSolicitacaoSelecionado;
         document.getElementById("texto-informacao-procedimentos").innerHTML="Selecione";
-        escolhaAntigaTipoSolicitacaoSelecionado=TipoSolicitacaoSelecionado;
 
-        var elementosOpcoesProcedimentos=document.getElementsByClassName("campo-grupo-opcoes-informacao-procedimentos");
-        for(var contadorFor=0; contadorFor<elementosOpcoesProcedimentos.length; contadorFor++){
-            (function (contador){
-                elementosOpcoesProcedimentos[contador].addEventListener("click", ()=>{
-                    document.getElementsByClassName("elementos-opcoes-informacao-procedimentos")[contador].click();
-                });
-            })(contadorFor);
+        // Removendo dos inputs do procedimentos marcados como checked
+        procedimentosSelecionado=document.querySelectorAll(".elementos-opcoes-informacao-procedimentos:checked");
+        if(procedimentosSelecionado.length>0){
+            for(contadorFor=0; contadorFor<procedimentosSelecionado.length; contadorFor++){
+                if(procedimentosSelecionado[contadorFor].checked==true){
+                    procedimentosSelecionado[contadorFor].checked=false;
+                }
+            }
         }
+
+        procedimentosSelecionado="";
+        copiaProcedimentosSelecionado="";
     }
 }
 
+
+// Adicionando evento ao elemento procedimentos para Abrindo/Fechando (atualizando também ao fechar)
+// Vai fechar todos os outros campos abertos
 var procedimentosSelecionado=""
 var copiaProcedimentosSelecionado=""
 document.getElementById("campo-informacao-procedimentos").addEventListener("click", ()=>{
@@ -180,12 +218,13 @@ document.getElementById("campo-informacao-procedimentos").addEventListener("clic
 
     if(controleDisplayProcedimentos==false && document.querySelector(".elementos-opcoes-tipo-solicitacao:checked")!=null){
         controleDisplayProcedimentos=true;
-        document.getElementById("campo-opcoes-informacao-procedimentos").style="display: block";
+        elementoSolicitacaoSelecionado.style="display: block";
     }
     else if(document.querySelector(".elementos-opcoes-tipo-solicitacao:checked")!=null){
         controleDisplayProcedimentos=false;
-        document.getElementById("campo-opcoes-informacao-procedimentos").style="display: none";
+        elementoSolicitacaoSelecionado.style="display: none";
 
+        // Colocando o texto no elemento Procedimentos
         procedimentosSelecionado=document.querySelectorAll(".elementos-opcoes-informacao-procedimentos:checked");
         if(procedimentosSelecionado.length>0){
             for(contadorFor=0; contadorFor<procedimentosSelecionado.length; contadorFor++){
@@ -222,6 +261,7 @@ document.getElementById("campo-informacao-procedimentos").addEventListener("clic
     }
 });
 
+// Verifica quais campos não foram preenchidos, adicionando uma mensagem e uma borda nos elementos
 var camposFaltandoPreencher=[];
 var contadorCamposFaltandoPreencher=0;
 function verificarCamposPreenchidos(){
@@ -288,6 +328,7 @@ function verificarCamposPreenchidos(){
     }
 }
 
+// Adicionando evento no botão de salvar ao ser clicado, ele manda verificar se está tudo certo, estando tudo certo ele envia os dados para o servidor.
 document.getElementById("botao-salvar").addEventListener("click", ()=>{
     verificarElementosAberto();
     if(verificarCamposPreenchidos()){

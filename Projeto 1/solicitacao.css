@@ -315,7 +315,7 @@ body{
     font-size: 13px;
 }
 
-#campo-opcoes-informacao-procedimentos{
+.campo-opcoes-informacao-procedimentos{
     display: none;
     position: absolute;
     
