@@ -3,6 +3,15 @@
 $autorizacao_execucao_script_database=true;
 require_once("database.php");
 
+if(isset($_POST["nomePaciente"]) && isset($_POST["dataNascPaciente"]) && isset($_POST["cpfPaciente"]) && isset($_POST["nomeProfissional"]) && isset($_POST["nomeSolicitacao"]) && isset($_POST["dataEscolhida"]) && isset($_POST["horaEscolhida"])){
+    if(cadastrarDBListaSolicitacao()){
+        die("Salvo");
+    }
+    else{
+        die("Não");
+    }
+}
+
 $retornoConsultaDBProfissionais=consultarDBProfissionais();
 $retornoConsultaDBTipoSolicitacao=consultarDBTipoSolicitacao();
 $retornoConsultaDBProcedimentos=consultarDBProcedimentos();
@@ -26,10 +35,28 @@ echo '
     </header>
 
     <article id="campo-corpo">
-        <button id="botao-voltar">Voltar</button>
+        <button id="botao-voltar" onclick="window.history.back()">Voltar</button>
 
         <form id="formulario-solicitacao">
-            <section class="sessao-solicitacao">
+            <section class="sessao-solicitacao">';
+
+if(isset($_POST["nome"]) && isset($_POST["dataNasc"]) && isset($_POST["cpf"])){
+    echo'
+                <div class="campo-solicitacao-paciente">
+                    <label class="descricao-elemento">Nome do Paciente</label>
+                    <input class="elemento-informacao-paciente" type="text" name="nomePaciente" value="'.$_POST["nome"].'">
+                </div>
+                <div class="campo-solicitacao-paciente">
+                    <label class="descricao-elemento">Data de Nascimento</label>
+                    <input class="elemento-informacao-paciente" type="text" name="dataNascPaciente" maxlength="10" value="'.$_POST["dataNasc"].'">
+                </div>
+                <div class="campo-solicitacao-paciente">
+                    <label class="descricao-elemento">CPF</label>
+                    <input class="elemento-informacao-paciente" type="text" name="cpfPaciente" maxlength="14" value="'.$_POST["cpf"].'">
+                </div>';
+}
+else{
+    echo'
                 <div class="campo-solicitacao-paciente">
                     <label class="descricao-elemento">Nome do Paciente</label>
                     <input class="elemento-informacao-paciente" type="text" name="nomePaciente">
@@ -41,7 +68,9 @@ echo '
                 <div class="campo-solicitacao-paciente">
                     <label class="descricao-elemento">CPF</label>
                     <input class="elemento-informacao-paciente" type="text" name="cpfPaciente" maxlength="14">
-                </div>
+                </div>';
+}
+echo'
             </section>
             <section class="sessao-solicitacao">
                 <div id="campo-mensagem">
@@ -118,7 +147,7 @@ echo'
 for($contadorFor=0; $contadorFor<count($retornoConsultaDBProcedimentos["exame"]); $contadorFor++){
     echo '
                         <div class="campo-grupo-opcoes-informacao-procedimentos">
-                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" name="nomeProcedimentosExame" value="'.$retornoConsultaDBProcedimentos["exame"][$contadorFor].'">
+                            <input class="elementos-opcoes-informacao-procedimentos" type="checkbox" name="nomeProcedimentosExame'.$contadorFor.'" value="'.$retornoConsultaDBProcedimentos["exame"][$contadorFor].'">
                             <label class="texto-informacao-opcoes">'.$retornoConsultaDBProcedimentos["exame"][$contadorFor].'</label>
                         </div>';
 }

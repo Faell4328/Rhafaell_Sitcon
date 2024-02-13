@@ -169,4 +169,71 @@ function consultarDBProcedimentos(){
     return $procedimentos;
 }
 
+function cadastrarDBListaSolicitacao(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $dataNasc=explode("/", $_POST["dataNascPaciente"]);
+    $dataNasc=$dataNasc[2]."-".$dataNasc[1]."-".$dataNasc[0];
+
+    $conexaoTratada=$conexao->prepare("SELECT id FROM pacientes WHERE nome=? AND CPF=?");
+    $conexaoTratada->bind_param("ss", $_POST["nomePaciente"], $_POST["cpfPaciente"]);
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($paciete_id);
+    $conexaoTratada->fetch();
+    $conexaoTratada->close();
+
+    $conexaoTratada=$conexao->prepare("SELECT id FROM tipoSolicitacao WHERE descricao=?");
+    $conexaoTratada->bind_param("s", $_POST["nomeSolicitacao"]);
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($tipoSolicitacao_id);
+    $conexaoTratada->fetch();
+    $conexaoTratada->close();
+
+    $procedimentos_id="";
+    if($_POST["nomeSolicitacao"]=="Exames Laboratoriais"){
+        for($contadorFor=0; $contadorFor<10; $contadorFor++){
+            if(isset($_POST["nomeProcedimentosExame".(string) $contadorFor])){
+
+                $copiaProcedimentos_id="";
+                $conexaoTratada=$conexao->prepare("SELECT id FROM procedimentos WHERE descricao=?");
+                $conexaoTratada->bind_param("s", $_POST["nomeProcedimentosExame".(string) $contadorFor]);
+                $conexaoTratada->execute();
+                $conexaoTratada->store_result();
+                $conexaoTratada->bind_result($copiaProcedimentos_id);
+                $conexaoTratada->fetch();
+                $conexaoTratada->close();
+        
+                $procedimentos_id.=$copiaProcedimentos_id.";";
+            }
+        }
+        $procedimentos_id=substr($procedimentos_id, 0, strlen($procedimentos_id)-1);
+    }
+    else{
+        $procedimentos_id="";
+        $conexaoTratada=$conexao->prepare("SELECT id FROM procedimentos WHERE descricao=?");
+        $conexaoTratada->bind_param("s", $_POST["nomeProcedimentosConsulta"]);
+        $conexaoTratada->execute();
+        $conexaoTratada->store_result();
+        $conexaoTratada->bind_result($procedimentos_id);
+        $conexaoTratada->fetch();
+        $conexaoTratada->close();
+        
+        settype($procedimentos_id, "string");
+    }
+
+    $status="ativo";
+    $conexaoTratada=$conexao->prepare("INSERT INTO listaSolicitacao (paciente_id, tipoSolicitacao_id, procedimentos_id, status) VALUES (?, ?, ?, ?)");
+    $conexaoTratada->bind_param("iiss", $paciete_id, $tipoSolicitacao_id, $procedimentos_id, $status);
+    $conexaoTratada->execute();
+    $conexaoTratada->close();
+
+    return $conexao->insert_id;
+}
+
 ?>

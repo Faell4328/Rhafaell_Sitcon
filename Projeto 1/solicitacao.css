@@ -469,3 +469,24 @@ body{
         outline:none;
     }
 }
+
+@keyframes conteudo-salvo{
+    0%{
+        opacity: 1;
+    }
+    10%{
+        opacity: 1;
+    }
+    20%{
+        background-color: #0f0;
+    }
+    80%{
+        background-color: #0f0;
+    }
+    90%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 1;
+    }
+}

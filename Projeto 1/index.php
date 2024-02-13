@@ -55,7 +55,7 @@ for($contadorPacientes=0; $contadorPacientes<$quantidadePacientes; $contadorPaci
                     <td class="coluna-conteudo-tabela">'.$nomePacienteAtual.'</td>
                     <td class="coluna-conteudo-tabela">'.$dataNascPacienteAtual.'</td>
                     <td class="coluna-conteudo-tabela">'.$cpfPacienteAtual.'</td>
-                    <td class="coluna-conteudo-tabela-botao"><button class="botao-prosseguir-tabela">Proseguir</button></td>
+                    <td class="coluna-conteudo-tabela-botao"><button class="botao-prosseguir-tabela" onclick="enviarDadosParaSolicitacao(this)">Prosseguir</button></td>
                 </tr>';
 }
 
@@ -146,6 +146,12 @@ echo'
     <footer id="campo-rodape">
         <p id="texto-rodape">Rhafaell_SITCON</p>
     </footer>
+
+    <form id="prosseguir" method="POST" action="solicitacao.php">
+        <input id="elemento-prosseguir-nome" type="hidden" name="nome">
+        <input id="elemento-prosseguir-dataNasc" type="hidden" name="dataNasc">
+        <input id="elemento-prosseguir-cpf" type="hidden" name="cpf">
+    </form>
 
 </body>
 </html>';

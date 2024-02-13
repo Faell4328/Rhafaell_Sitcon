@@ -337,11 +337,32 @@ document.getElementById("botao-salvar").addEventListener("click", ()=>{
         ajax.onreadystatechange=function(){
             if(this.readyState==4){
                 if(this.status==200){
-                    console.log(this.responseText);
+                    if(this.responseText=="Salvo"){
+                        controleAnimacao=true;
+                        document.getElementById("campo-mensagem").style="animation: conteudo-salvo 5s linear 0s 1;";
+                        document.getElementById("texto-mensagem").innerHTML="Adicionando";
+                        setTimeout(function(){
+
+                            document.getElementById("campo-mensagem").style="";
+                            document.getElementById("texto-mensagem").innerHTML="Os campos com * devem ser preechidos obrigatóriamente.";
+                            controleAnimacao=false;
+                        }, 5000);
+                    }
+                    else{
+                        controleAnimacao=true;
+                        document.getElementById("campo-mensagem").style="animation: campo-mensagem-erro 5s linear 0s 1;";
+                        document.getElementById("texto-mensagem").innerHTML="Não foi possível salvar";
+                        setTimeout(function(){
+
+                            document.getElementById("campo-mensagem").style="";
+                            document.getElementById("texto-mensagem").innerHTML="Os campos com * devem ser preechidos obrigatóriamente.";
+                            controleAnimacao=false;
+                        }, 5000);
+                    }
                 }
             }
         }
-        ajax.open("POST", "teste.php");
+        ajax.open("POST", "solicitacao.php");
         ajax.send(formulario);
     }
 });
