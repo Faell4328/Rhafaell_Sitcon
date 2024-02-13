@@ -40,7 +40,7 @@ body{
     border: 1px solid #fff;
     color: #fff;
 
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
 
     cursor: pointer;
@@ -49,7 +49,6 @@ body{
 
 .botao-cabecalho:hover{
     background-color: #fff;
-    border: 1px solid #00629b;
     color: #00629b;
 }
 
@@ -157,10 +156,11 @@ body{
 }
 
 .botao-prosseguir-tabela{
-    padding: 10px 12px;
+    padding: 10px 10px;
 
     border: none;
     border-radius: 10px;
+    border: 1px solid #ff8200;
     background-color: #ff8200;
     font-weight: bold;
     color: #fff;
@@ -170,7 +170,6 @@ body{
 }
 
 .botao-prosseguir-tabela:hover{
-    outline: 1px solid #ff8200;
     background-color: #fff;
     color: #ff8200;
 }
@@ -201,8 +200,6 @@ body{
 #elementos-paginador{
     display: flex;
     align-items: center;
-
-    list-style-type: none;
 }
 
 .elemento-pagina{
@@ -213,6 +210,7 @@ body{
     color: #d3d3d3;
     font-weight: bold;
     font-size: 14px;
+    text-decoration: none;
 
     cursor: pointer;
 }
