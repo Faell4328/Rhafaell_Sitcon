@@ -328,14 +328,14 @@ function verificarCamposPreenchidos(){
     }
 }
 
+var ajax=new XMLHttpRequest();
 // Adicionando evento no botão de salvar ao ser clicado, ele manda verificar se está tudo certo, estando tudo certo ele envia os dados para o servidor.
 document.getElementById("botao-salvar").addEventListener("click", ()=>{
     verificarElementosAberto();
     if(verificarCamposPreenchidos()){
-        var ajax=new XMLHttpRequest();
         var formulario=new FormData(document.getElementById("formulario-solicitacao"));
         ajax.onreadystatechange=function(){
-            if(this.readyState==4){
+        if(this.readyState==4){
                 if(this.status==200){
                     if(this.responseText=="Salvo"){
                         controleAnimacao=true;

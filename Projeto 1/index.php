@@ -4,6 +4,32 @@ if(!isset($_GET["p"])){
     header("Location:?p=1");
 }
 
+if(isset($_POST["consulta"])){
+    $autorizacao_execucao_script_database=true;
+    require_once("database.php");
+    $retornoConsultaEspecificaDB=consultarEspecificaPacientes();
+
+    echo'
+                <tr class="linha-tabela-cabecalho">
+                    <th class="coluna-cabecalho-tabela">Paciente</th>
+                    <th class="coluna-cabecalho-tabela">Nascimento</th>
+                    <th class="coluna-cabecalho-tabela">CPF</th>
+                    <th class="coluna-cabecalho-tabela">Ações</th>
+                </tr>';
+
+    for($contadorFor=0; $contadorFor<count($retornoConsultaEspecificaDB); $contadorFor++){
+
+        echo'
+                    <tr class="linha-tabela-conteudo">
+                        <td class="coluna-conteudo-tabela">'.$retornoConsultaEspecificaDB[$contadorFor]["nome"].'</td>
+                        <td class="coluna-conteudo-tabela">'.$retornoConsultaEspecificaDB[$contadorFor]["dataNasc"].'</td>
+                        <td class="coluna-conteudo-tabela">'.$retornoConsultaEspecificaDB[$contadorFor]["cpf"].'</td>
+                        <td class="coluna-conteudo-tabela-botao"><button class="botao-prosseguir-tabela" onclick="enviarDadosParaSolicitacao(this)">Prosseguir</button></td>
+                    </tr>';
+    }
+    exit;
+}
+
 $autorizacao_execucao_script_database=true;
 require_once("database.php");
 $retornoConsultaDB=consultarPacientes();
@@ -21,8 +47,8 @@ echo '
     
     <header id="campo-cabecalho">
         <div id="campo-botao-cabecalho">
-            <button class="botao-cabecalho">Solicitações Clínicas</button>
-            <button class="botao-cabecalho">Listagem de Solicitações</button>
+            <button class="botao-cabecalho" onclick="window.location.href=\'solicitacao.php\'">Solicitações Clínicas</button>
+            <button class="botao-cabecalho" onclick="window.location.href=\'lista.php\'">Listagem de Solicitações</button>
         </div>
     </header>
 

@@ -7,6 +7,56 @@ if(!isset($autorizacao_execucao_script_database)){
 $autorizacao_execucao_script_credenciais_db=true;
 include_once("../../../credenciais.php");
 
+function consultarEspecificaPacientes(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $conexaoTratada=$conexao->prepare("SELECT nome, DATE_FORMAT(dataNasc, '%d/%m/%Y') AS dataFormatada, CPF FROM pacientes WHERE nome LIKE ? AND status='ativo'");
+    $conteudoEnviadoConsulta="%".$_POST["consulta"]."%";
+    $conexaoTratada->bind_param("s", $conteudoEnviadoConsulta);
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($nome, $dataNascimento, $cpf);
+
+    $consulta=[];
+    $contadorConsulta=0;
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+            $consulta[$contadorConsulta]=[
+                "nome"=>$nome,
+                "dataNasc"=>$dataNascimento,
+                "cpf"=>$cpf
+            ];
+            $contadorConsulta++;
+        }
+    }
+    $conexaoTratada->close();
+
+    $conexaoTratada=$conexao->prepare("SELECT nome, DATE_FORMAT(dataNasc, '%d/%m/%Y') AS dataFormatada, CPF FROM pacientes WHERE cpf LIKE ? AND status='ativo'");
+    $conteudoEnviadoConsulta="%".$_POST["consulta"]."%";
+    $conexaoTratada->bind_param("s", $conteudoEnviadoConsulta);
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($nome, $dataNascimento, $cpf);
+
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+            $consulta[$contadorConsulta]=[
+                "nome"=>$nome,
+                "dataNasc"=>$dataNascimento,
+                "cpf"=>$cpf
+            ];
+            $contadorConsulta++;
+        }
+    }
+    $conexaoTratada->close();
+
+    return $consulta;
+}
+
 function consultarQuantidadeTotalLinhas(){
     global $credenciais;
     $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
@@ -79,6 +129,116 @@ function consultarPacientes(){
     ];
 
     return $retornoFuncao;
+}
+
+function consultarListagemSolicitacao(){
+    global $credenciais;
+    $conexao=new mysqli($credenciais["nome_servidor"], $credenciais["username"], $credenciais["senha"], $credenciais["nome_db"]);
+    if($conexao->connect_error){
+        die("Um erro inesperado aconteceu");
+    }
+
+    $conexaoTratada=$conexao->prepare("SELECT paciente_id, tipoSolicitacao_id, procedimentos_id, DATE_FORMAT (data, '%d-%m-%Y') AS dataFormatada, hora FROM listaSolicitacao WHERE status='ativo'");
+    $conexaoTratada->execute();
+    $conexaoTratada->store_result();
+    $conexaoTratada->bind_result($paciente_id, $tipoSolicitacao_id, $procedimentos_id, $data, $hora);
+
+    $conteudoListaSolicitacao=[];
+    $contadorId=0;
+    if($conexaoTratada->num_rows){
+        while($conexaoTratada->fetch()){
+
+            $data=explode("-", $data);
+            $data=$data[0]."/".$data[1]."/".$data[2];
+
+            $conteudoListaSolicitacao[$contadorId]=[
+                "paciente_id"=>$paciente_id,
+                "tipoSolicitacao_id"=>$tipoSolicitacao_id,
+                "procedimentos_id"=>$procedimentos_id,
+                "data"=>$data,
+                "hora"=>$hora
+            ];
+            $contadorId++;
+        }
+    }
+    $conexaoTratada->close();
+
+    $pacientes=[];
+    for($contadorFor=0; $contadorFor<count($conteudoListaSolicitacao); $contadorFor++){
+        $conexaoTratada=$conexao->prepare("SELECT nome, CPF FROM pacientes WHERE id=? AND status='ativo'");
+        $conexaoTratada->bind_param("i", $conteudoListaSolicitacao[$contadorFor]["paciente_id"]);
+        $conexaoTratada->execute();
+        $conexaoTratada->store_result();
+        $conexaoTratada->bind_result($nomePaciente, $cpf);
+
+        if($conexaoTratada->num_rows){
+            while($conexaoTratada->fetch()){
+
+                $pacientes[$contadorFor]=[
+                    "nomePaciente"=>$nomePaciente,
+                    "cpf"=>$cpf
+                ];
+            }
+        }
+        $conexaoTratada->close();
+    }
+
+    $tipoSolicitacao=[];
+    for($contadorFor=0; $contadorFor<count($conteudoListaSolicitacao); $contadorFor++){
+
+        $conexaoTratada=$conexao->prepare("SELECT descricao FROM tipoSolicitacao WHERE id=? AND status='ativo'");
+        $conexaoTratada->bind_param("i", $conteudoListaSolicitacao[$contadorFor]["tipoSolicitacao_id"]);
+        $conexaoTratada->execute();
+        $conexaoTratada->store_result();
+        $conexaoTratada->bind_result($descricao);
+
+        if($conexaoTratada->num_rows){
+            while($conexaoTratada->fetch()){
+                $tipoSolicitacao[$contadorFor]=$descricao;
+            }
+        }
+        $conexaoTratada->close();
+    }
+
+    $tipoProcedimentos=[];
+    $elementosSeparados=[];
+    for($contadorFor=0; $contadorFor<count($conteudoListaSolicitacao); $contadorFor++){
+        $elementosSeparados[$contadorFor]=explode(";", $conteudoListaSolicitacao[$contadorFor]["procedimentos_id"]);
+
+        $textoProcedimentos="";
+
+        for($contadorFor2=0; $contadorFor2<count($elementosSeparados[$contadorFor]); $contadorFor2++){
+
+            $conexaoTratada=$conexao->prepare("SELECT descricao FROM procedimentos WHERE id=? AND status='ativo'");
+            $conexaoTratada->bind_param("i", $elementosSeparados[$contadorFor][$contadorFor2]);
+            $conexaoTratada->execute();
+            $conexaoTratada->store_result();
+            $conexaoTratada->bind_result($descricao);
+
+            if($conexaoTratada->num_rows){
+                while($conexaoTratada->fetch()){
+                    $textoProcedimentos.=$descricao.", ";
+                }
+            }
+            $conexaoTratada->close();
+        }
+
+        $tipoProcedimentos[$contadorFor]=substr($textoProcedimentos, 0, strlen($textoProcedimentos)-2);
+    }
+
+    $retorno=[];
+    for($contadorFor=0; $contadorFor<count($conteudoListaSolicitacao); $contadorFor++){
+        $retorno[$contadorFor]=[
+            "nomePaciente"=>$pacientes[$contadorFor]["nomePaciente"],
+            "cpf"=>$pacientes[$contadorFor]["cpf"],
+            "tipoSolicitacao"=>$tipoSolicitacao[$contadorFor],
+            "tipoProcedimentos"=>$tipoProcedimentos[$contadorFor],
+            "data"=>$conteudoListaSolicitacao[$contadorFor]["data"],
+            "hora"=>$conteudoListaSolicitacao[$contadorFor]["hora"]
+        ];
+    }
+
+    return $retorno;
 }
 
 function consultarDBProfissionais(){
@@ -226,10 +386,10 @@ function cadastrarDBListaSolicitacao(){
         
         settype($procedimentos_id, "string");
     }
-
+    
     $status="ativo";
-    $conexaoTratada=$conexao->prepare("INSERT INTO listaSolicitacao (paciente_id, tipoSolicitacao_id, procedimentos_id, status) VALUES (?, ?, ?, ?)");
-    $conexaoTratada->bind_param("iiss", $paciete_id, $tipoSolicitacao_id, $procedimentos_id, $status);
+    $conexaoTratada=$conexao->prepare("INSERT INTO listaSolicitacao (paciente_id, tipoSolicitacao_id, procedimentos_id, data, hora, status) VALUES (?, ?, ?, ?, ?, ?)");
+    $conexaoTratada->bind_param("iissss", $paciete_id, $tipoSolicitacao_id, $procedimentos_id, $_POST["dataEscolhida"], $_POST["horaEscolhida"], $status);
     $conexaoTratada->execute();
     $conexaoTratada->close();
 

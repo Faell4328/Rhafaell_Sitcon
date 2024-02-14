@@ -29,8 +29,8 @@ echo '
 
     <header id="campo-cabecalho">
         <div id="campo-botao-cabecalho">
-            <button class="botao-cabecalho">Solicitações Clínicas</button>
-            <button class="botao-cabecalho">Listagem de Solicitações</button>
+            <button class="botao-cabecalho" onclick="window.location.href=\'solicitacao.php\'">Solicitações Clínicas</button>
+            <button class="botao-cabecalho" onclick="window.location.href=\'lista.php\'">Listagem de Solicitações</button>
         </div>
     </header>
 
@@ -44,15 +44,15 @@ if(isset($_POST["nome"]) && isset($_POST["dataNasc"]) && isset($_POST["cpf"])){
     echo'
                 <div class="campo-solicitacao-paciente">
                     <label class="descricao-elemento">Nome do Paciente</label>
-                    <input class="elemento-informacao-paciente" type="text" name="nomePaciente" value="'.$_POST["nome"].'">
+                    <input class="elemento-informacao-paciente" type="text" name="nomePaciente" readonly style="background-color: #edf8fc" value="'.$_POST["nome"].'">
                 </div>
                 <div class="campo-solicitacao-paciente">
                     <label class="descricao-elemento">Data de Nascimento</label>
-                    <input class="elemento-informacao-paciente" type="text" name="dataNascPaciente" maxlength="10" value="'.$_POST["dataNasc"].'">
+                    <input class="elemento-informacao-paciente" type="text" name="dataNascPaciente" maxlength="10" readonly style="background-color: #edf8fc" value="'.$_POST["dataNasc"].'">
                 </div>
                 <div class="campo-solicitacao-paciente">
                     <label class="descricao-elemento">CPF</label>
-                    <input class="elemento-informacao-paciente" type="text" name="cpfPaciente" maxlength="14" value="'.$_POST["cpf"].'">
+                    <input class="elemento-informacao-paciente" type="text" name="cpfPaciente" maxlength="14" readonly style="background-color: #edf8fc" value="'.$_POST["cpf"].'">
                 </div>';
 }
 else{

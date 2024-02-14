@@ -64,41 +64,6 @@ body{
     margin: auto;
 }
 
-#elemento-pesquisa{
-    display: flex;
-    justify-content: flex-start;
-
-    width: 350px;
-    height: 30px;
-
-    padding: 10px;
-    margin-top: 28px;
-
-    border-radius: 10px;
-    background-color: #fff;
-    
-    box-shadow: 10px 10px 50px #ddd;
-}
-
-#input-pesquisa{
-    width: 400px;
-
-    margin: 0 5px;
-
-    border: none;
-    
-    font-size: 15px;
-}
-
-#input-pesquisa::placeholder{
-    color: #d3d3d3;
-}
-
-#input-pesquisa:focus{
-    outline: none;
-}
-
-
 #sessao-consulta{
     width: 100%;
     height: auto;
@@ -123,7 +88,7 @@ body{
 .coluna-cabecalho-tabela{
     width: 25%;
 
-    padding: 15px;
+    padding: 15px 50px 15px 15px;
 
     font-size: 20px;
     font-weight: bold;
@@ -142,15 +107,7 @@ body{
 .coluna-conteudo-tabela{
     width: 25%;
 
-    padding: 15px;
-
-    font-size: 15px;
-    color: #000;
-    text-align: center;
-}
-
-.coluna-conteudo-tabela-botao{
-    width: 25%;
+    padding: 15px 50px 15px 15px;
 
     font-size: 15px;
     color: #000;
@@ -174,82 +131,6 @@ body{
 .botao-prosseguir-tabela:hover{
     background-color: #fff;
     color: #ff8200;
-}
-
-#sessao-paginador{
-    display: flex;
-    justify-content: center;
-
-    width: 100%;
-    height: auto;
-}
-
-#campo-paginador{
-    display: flex;
-    justify-content: center;
-
-    width: auto;
-    height: 45px;
-    
-    margin-top: 30px;
-
-    border-radius: 10px;
-    background-color: #fafafa;
-    
-    box-shadow: 10px 10px 50px #ddd;
-}
-
-#elementos-paginador{
-    display: flex;
-    align-items: center;
-}
-
-.elemento-pagina{
-    padding: 5px 8px;
-    margin: 3px;
-
-    border-radius: 5px;
-    color: #d3d3d3;
-    font-weight: bold;
-    font-size: 14px;
-    text-decoration: none;
-
-    cursor: pointer;
-}
-
-#elemento-pagina-atual{
-    padding: 5px 8px;
-    margin: 3px;
-
-    border-radius: 5px;
-    background-color: #00629b;
-    color: #fff;
-    font-weight: bold;
-    font-size: 14px;
-
-    cursor: pointer;
-}
-
-#seta-anterior-pagina{
-    width: auto;
-    height: 14px;
-
-    padding: 10px;
-    margin: 0 19px 0 14px;
-
-    cursor: pointer;
-}
-
-#seta-proxima-pagina{
-    width: auto;
-    height: 14px;
-
-    padding: 10px;
-    margin: 0 14px 0 19px;
-
-    transform: rotate(180deg);
-
-    cursor: pointer;
 }
 
 /*Rodape página*/
