@@ -332,7 +332,7 @@ var ajax=new XMLHttpRequest();
 // Adicionando evento no botão de salvar ao ser clicado, ele manda verificar se está tudo certo, estando tudo certo ele envia os dados para o servidor.
 document.getElementById("botao-salvar").addEventListener("click", ()=>{
     verificarElementosAberto();
-    if(verificarCamposPreenchidos()){
+    if(verificarCamposPreenchidos() && controleAnimacao==false){
         var formulario=new FormData(document.getElementById("formulario-solicitacao"));
         ajax.onreadystatechange=function(){
         if(this.readyState==4){
@@ -359,6 +359,27 @@ document.getElementById("botao-salvar").addEventListener("click", ()=>{
                             controleAnimacao=false;
                         }, 5000);
                     }
+                }
+                else{
+                    controleAnimacao=true;
+                    document.getElementById("campo-mensagem").style="animation: campo-mensagem-erro 5s linear 0s 1;";
+                    document.getElementById("texto-mensagem").innerHTML="Não foi possível salvar, verifique os campos nome, data de nascimento e cpf estão corretos";
+
+                    for(var contadorFor=0; contadorFor<3; contadorFor++){
+                        document.getElementsByClassName("elemento-informacao-paciente")[contadorFor].style="animation: campo-nao-preenchido 5s linear 0s 1;";
+                    }
+                    setTimeout(function(){
+
+                        document.getElementById("campo-mensagem").style="";
+                        document.getElementById("texto-mensagem").innerHTML="Os campos com * devem ser preechidos obrigatóriamente.";
+
+                        for(var contadorFor=0; contadorFor<3; contadorFor++){
+                            document.getElementsByClassName("elemento-informacao-paciente")[contadorFor].style="";
+                        }
+
+                        controleAnimacao=false;
+
+                    }, 5000);
                 }
             }
         }
