@@ -1,0 +1,15 @@
+BANCO DE DADOS:
+
+CREATE DATABASE sitcon;
+
+CREATE TABLE pacientes (id INTEGER PRIMARY KEY, nome VARCHAR(30) NOT NULL, dataNasc DATE NOT NULL, CPF VARCHAR(14) NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
+
+CREATE TABLE profissional (id INTEGER PRIMARY KEY, nome VARCHAR(30) NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
+
+CREATE TABLE tipoSolicitacao (id INTEGER PRIMARY KEY, descricao VARCHAR(30) NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
+
+CREATE TABLE procedimentos (id INTEGER PRIMARY KEY, descricao VARCHAR(30) NOT NULL, tipo_id INTEGER NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
+
+CREATE TABLE listaSolicitacao(id INTEGER PRIMARY KEY AUTO_INCREMENT, paciente_id INTEGER NOT NULL, tipoSolicitacao_id INTEGER NOT NULL, procedimentos_id VARCHAR(30), data DATE NOT NULL, hora VARCHAR(5) NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
+
+CREATE TABLE profissionalAtende(id INTEGER PRIMARY KEY, procedimento_id INTEGER NOT NULL, profissional_id INTEGER NOT NULL, status ENUM("ativo", "inativo", "bloqueado") NOT NULL);
